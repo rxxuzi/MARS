@@ -12,10 +12,10 @@ class Core() extends JPanel {
    private final val startTime = System.currentTimeMillis()
    private final var lastTime = startTime
    //Ballの半径
-   final val radius = 25
+   private final val radius = 25
    //SleepTime
-   private final val sleepSpeed = 2
-   val interval = 1000
+   private final val sleepSpeed = 1
+   private val interval = 1000
    //clickCount
    private final var clickCount = 1
 
@@ -37,7 +37,8 @@ class Core() extends JPanel {
       g.setFont(new Font("Serif", Font.BOLD, 20))
       g.drawString((nowTime - startTime) + "ms", 10, 20)
       g.drawString(getWidth + ", " + getHeight, 10, 40)
-      g.drawString("Balls :" + (waves.size), 10, 60)
+      g.drawString("Circle :" + waves.size, 10, 60)
+      g.drawString("max Radius :" + Wave(0,0,0,0).maxRadius + "px", 10, 80)
 
 
    }
@@ -62,7 +63,7 @@ class Core() extends JPanel {
             }
          }
       }catch {
-         case e: Exception => {}
+         case _: Exception =>
       }
 //      for(wave <- waves){
 //         wave.draw(g)

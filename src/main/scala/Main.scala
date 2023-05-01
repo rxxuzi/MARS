@@ -11,15 +11,13 @@ object Main {
   def main(args: Array[String]): Unit = {
     println("Hello world!")
     val jf = new JFrame()
-    val jp = new JPanel()
     jf.setVisible(true)
     jf.setDefaultCloseOperation(3)
     jf.setTitle("Balls")
     jf.add {
       new Core()
     }
-    jf.setSize(1050, 750)
-
+    jf.setSize(1750, 1550)
 
     System.out.println("Hello Jdk !")
 

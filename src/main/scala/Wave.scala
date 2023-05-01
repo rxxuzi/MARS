@@ -1,11 +1,9 @@
-
 import java.awt.{Color, Graphics}
-import javax.swing.JPanel
 
 case class Wave(a:Int, b:Int, c:Int, time :Long) extends Core{
    W.x += a
    W.y += b
-   private final val maxRadius = 100
+   final val maxRadius = 250
 
    private val colors = Array[Color](
          new Color(255, 0, 0),
