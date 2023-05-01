@@ -5,6 +5,7 @@ import javax.swing.JPanel
 case class Wave(a:Int, b:Int, c:Int, time :Long) extends Core{
    W.x += a
    W.y += b
+   private final val maxRadius = 100
 
    private val colors = Array[Color](
          new Color(255, 0, 0),
@@ -46,7 +47,7 @@ case class Wave(a:Int, b:Int, c:Int, time :Long) extends Core{
          case 11 => g.setColor(colors(11))
          case _ => g.setColor(colors(12))
       }
-      if(rad < 300){
+      if(rad < maxRadius){
          g.drawOval(W.x -rad/2, W.y-rad/2, rad, rad)
       }else{
          W.delete = true

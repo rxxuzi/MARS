@@ -37,7 +37,7 @@ class Core() extends JPanel {
       g.setFont(new Font("Serif", Font.BOLD, 20))
       g.drawString((nowTime - startTime) + "ms", 10, 20)
       g.drawString(getWidth + ", " + getHeight, 10, 40)
-      g.drawString("Balls :" + (waves.size - 1), 10, 60)
+      g.drawString("Balls :" + (waves.size), 10, 60)
 
 
    }
@@ -50,13 +50,19 @@ class Core() extends JPanel {
       }
       g.setColor(Color.white)
 
-      
-      for(wave <- waves){
-         wave.draw(g)
-         if (wave.W.delete) {
-
+      //indicesを使うことでremoveできるようになる
+      for(i <- waves.indices){
+         waves(i).draw(g)
+         if(waves(i).W.delete){
+            waves.remove(i)
          }
       }
+//      for(wave <- waves){
+//         wave.draw(g)
+//         if (wave.W.delete) {
+//
+//         }
+//      }
 
 
       sleep()
