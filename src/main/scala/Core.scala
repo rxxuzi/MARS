@@ -53,9 +53,16 @@ class Core() extends JPanel {
       //indicesを使うことでremoveできるようになる
       for(i <- waves.indices){
          waves(i).draw(g)
-         if(waves(i).W.delete){
-            waves.remove(i)
+      }
+
+      try {
+         for(i <- waves.indices){
+            if(waves(i).W.delete){
+               waves.remove(i)
+            }
          }
+      }catch {
+         case e: Exception => {}
       }
 //      for(wave <- waves){
 //         wave.draw(g)

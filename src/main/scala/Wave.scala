@@ -25,7 +25,7 @@ case class Wave(a:Int, b:Int, c:Int, time :Long) extends Core{
    )
 
    private val speed = 30
-   println(time)
+//   println(time)
    def draw(g:Graphics): Unit = {
 
       val now = System.currentTimeMillis()
