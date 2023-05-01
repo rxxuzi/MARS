@@ -46,7 +46,7 @@ class Core() extends JPanel {
    private def draw(g: Graphics): Unit = {
       val nowTime = System.currentTimeMillis()
       if (nowTime - lastTime > interval) {
-         println(waves.length)
+//         println(waves.length)
          lastTime = nowTime
       }
       g.setColor(Color.white)
@@ -56,6 +56,7 @@ class Core() extends JPanel {
          waves(i).draw(g)
       }
 
+      //IndexOutOfBoundsExceptionを回避するためにtry catch
       try {
          for(i <- waves.indices){
             if(waves(i).W.delete){
@@ -65,13 +66,6 @@ class Core() extends JPanel {
       }catch {
          case _: Exception =>
       }
-//      for(wave <- waves){
-//         wave.draw(g)
-//         if (wave.W.delete) {
-//
-//         }
-//      }
-
 
       sleep()
    }
@@ -108,11 +102,17 @@ class Core() extends JPanel {
    }
 
    private class KA extends KeyAdapter{
-      override def keyPressed(e: KeyEvent): Unit = {
-         if(e.getKeyCode == KeyEvent.VK_SPACE){
-            println("space")
+      override def keyTyped(e: KeyEvent): Unit = {
+         super.keyTyped(e)
+         e.getKeyCode match {
+            case KeyEvent.VK_SPACE => println("space")
          }
       }
+
+      override def keyPressed(e: KeyEvent): Unit = super.keyPressed(e)
+
+      override def keyReleased(e: KeyEvent): Unit = super.keyReleased(e)
    }
+
 
 }

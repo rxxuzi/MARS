@@ -17,7 +17,7 @@ object Main {
     jf.add {
       new Core()
     }
-    jf.setSize(1750, 1550)
+    jf.setSize(1750, 1200)
 
     System.out.println("Hello Jdk !")
 
