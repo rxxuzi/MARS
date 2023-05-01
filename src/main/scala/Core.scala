@@ -1,4 +1,4 @@
-import java.awt.event.{MouseEvent, MouseListener, MouseMotionListener}
+import java.awt.event.{KeyAdapter, KeyEvent, MouseEvent, MouseListener, MouseMotionListener}
 import java.awt.{Color, Font, Graphics}
 import javax.swing.JPanel
 import scala.collection.mutable.ArrayBuffer
@@ -10,10 +10,12 @@ class Core() extends JPanel {
 
    //StartTime
    private final val startTime = System.currentTimeMillis()
+   private final var lastTime = startTime
    //Ballの半径
    final val radius = 25
    //SleepTime
    private final val sleepSpeed = 2
+   val interval = 1000
    //clickCount
    private final var clickCount = 1
 
@@ -24,6 +26,7 @@ class Core() extends JPanel {
    this.setBackground(Color.black)
    this.addMouseListener(new ML())
    this.addMouseMotionListener(new MML())
+   this.addKeyListener(new KA())
 
 
    override def paintComponent(g: Graphics): Unit = {
@@ -40,7 +43,11 @@ class Core() extends JPanel {
    }
 
    private def draw(g: Graphics): Unit = {
-
+      val nowTime = System.currentTimeMillis()
+      if (nowTime - lastTime > interval) {
+         println(waves.length)
+         lastTime = nowTime
+      }
       g.setColor(Color.white)
 
       
@@ -76,7 +83,7 @@ class Core() extends JPanel {
    //Mouse Listener class
    private class ML() extends MouseListener{
       override def mouseClicked(e: MouseEvent): Unit = {
-         println("clicked")
+//         println("clicked")
          waves += Wave(e.getX , e.getY , clickCount , System.currentTimeMillis())
          clickCount += e.getClickCount
       }
@@ -86,5 +93,12 @@ class Core() extends JPanel {
       override def mouseExited(e: MouseEvent): Unit = {}
    }
 
+   private class KA extends KeyAdapter{
+      override def keyPressed(e: KeyEvent): Unit = {
+         if(e.getKeyCode == KeyEvent.VK_SPACE){
+            println("space")
+         }
+      }
+   }
 
 }
