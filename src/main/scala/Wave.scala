@@ -5,32 +5,31 @@ case class Wave(a:Int, b:Int, c:Int, time :Long) extends Core{
    W.y += b
    final val maxRadius = 250
 
-   private val colors = Array[Color](
+   private final val colors = Array[Color](
          new Color(255, 0, 0),
-      new Color(255, 125, 0),
+      new Color(255, 85, 0),
+      new Color(255, 170, 0),
       new Color(255, 255, 0),
-      new Color(125, 255, 0),
+      new Color(170, 255, 0),
+      new Color(85, 255, 0),
       new Color(0, 255, 0),
-      new Color(0, 255, 125),
+      new Color(0, 255, 85),
+      new Color(0, 255, 170),
       new Color(0, 255, 255),
-      new Color(0, 125, 255),
+      new Color(0, 170, 255),
+      new Color(0, 85, 255),
       new Color(0, 0, 255),
-      new Color(125, 0, 255),
+      new Color(85, 0, 255),
+      new Color(170, 0, 255),
       new Color(255, 0, 255),
-      new Color(255, 0, 125),
-
-
+      new Color(255, 0, 170),
+      new Color(255, 0, 85),
    )
 
    private val speed = 30
-//   println(time)
-   def draw(g:Graphics): Unit = {
 
-      val now = System.currentTimeMillis()
-      val rad = ((now - time) / speed).toInt
-      //how to use match
-
-      rad % 12 match {
+   def setColor(g: Graphics, rad: Int) = {
+      rad % colors.length match {
          case 0 => g.setColor(colors(0))
          case 1 => g.setColor(colors(1))
          case 2 => g.setColor(colors(2))
@@ -43,10 +42,39 @@ case class Wave(a:Int, b:Int, c:Int, time :Long) extends Core{
          case 9 => g.setColor(colors(9))
          case 10 => g.setColor(colors(10))
          case 11 => g.setColor(colors(11))
-         case _ => g.setColor(colors(12))
+         case 12 => g.setColor(colors(12))
+         case 13 => g.setColor(colors(13))
+         case 14 => g.setColor(colors(14))
+         case 15 => g.setColor(colors(15))
+         case 16 => g.setColor(colors(16))
+         case 17 => g.setColor(colors(17))
+         case 18 => g.setColor(colors(18))
+         case _ => g.setColor(Color.white)
+
       }
+   }
+
+   //   println(time)
+   def draw(g:Graphics): Unit = {
+
+      val now = System.currentTimeMillis()
+      val rad = ((now - time) / speed).toInt
+      //how to use match
+      setColor(g ,rad)
+
+      val xp = Array[Int](0,0,0,0,0,0)
+      val yp = Array[Int](0,0,0,0,0,0)
+
+      for(i <- 0 until  6){
+         xp(i) = (math.cos((2 * math.Pi )/ i) * 100).toInt + W.x
+         yp(i) = (math.sin((2 * math.Pi )/ i) * 100).toInt + W.y
+      }
+      g.fillPolygon(xp,yp,6)
+
+
       if(rad < maxRadius){
-         g.drawOval(W.x -rad/2, W.y-rad/2, rad, rad)
+//         g.drawPolygon(x,y,5)
+//         g.drawOval(W.x -rad/2, W.y-rad/2, rad, rad)
       }else{
          W.delete = true
       }

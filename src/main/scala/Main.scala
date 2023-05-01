@@ -20,6 +20,8 @@ object Main {
     jf.setSize(1750, 1200)
 
     System.out.println("Hello Jdk !")
+    println(System.getProperty("java.version"))
+
 
   }
 }

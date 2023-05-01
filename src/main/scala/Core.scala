@@ -6,7 +6,7 @@ import scala.collection.mutable.ArrayBuffer
 class Core() extends JPanel {
    
    //Ball classのList
-   final val waves = ArrayBuffer[Wave]()
+   private final val waves = ArrayBuffer[Wave]()
 
    //StartTime
    private final val startTime = System.currentTimeMillis()
@@ -19,8 +19,8 @@ class Core() extends JPanel {
    //clickCount
    private final var clickCount = 1
 
-   var mx = 300
-   var my = 300 // マウスの座標
+   private var mx = 300
+   private var my = 300 // マウスの座標
 
    this.setFocusable(true)
    this.setBackground(Color.black)
@@ -103,10 +103,7 @@ class Core() extends JPanel {
 
    private class KA extends KeyAdapter{
       override def keyTyped(e: KeyEvent): Unit = {
-         super.keyTyped(e)
-         e.getKeyCode match {
-            case KeyEvent.VK_SPACE => println("space")
-         }
+         println(e.getKeyChar)
       }
 
       override def keyPressed(e: KeyEvent): Unit = super.keyPressed(e)
