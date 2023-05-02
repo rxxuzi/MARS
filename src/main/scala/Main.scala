@@ -10,10 +10,9 @@ import javax.swing.{JFrame, JPanel}
 object Main {
   def main(args: Array[String]): Unit = {
     println("Hello world!")
-    val jf = new JFrame()
+    val jf = new JFrame("MARS")
     jf.setVisible(true)
     jf.setDefaultCloseOperation(3)
-    jf.setTitle("Balls")
     jf.add {
       new Core()
     }
@@ -21,7 +20,5 @@ object Main {
 
     System.out.println("Hello Jdk !")
     println(System.getProperty("java.version"))
-
-
   }
 }

@@ -28,7 +28,7 @@ case class Wave(a:Int, b:Int, c:Int, time :Long) extends Core{
 
    private val speed = 30
 
-   def setColor(g: Graphics, rad: Int) = {
+   def setColor(g: Graphics, rad: Int): Unit = {
       rad % colors.length match {
          case 0 => g.setColor(colors(0))
          case 1 => g.setColor(colors(1))
@@ -59,37 +59,34 @@ case class Wave(a:Int, b:Int, c:Int, time :Long) extends Core{
 
       val now = System.currentTimeMillis()
       val rad = ((now - time) / speed).toInt
+      val dt = rad / 50d
       //how to use match
       setColor(g ,rad)
       val corner = 5
-      val dx = new Array[Int](5)
-      val dy = new Array[Int](5)
-      for (i <- 0 until 5){
-         dx(i) = (W.x + rad * math.cos(i * 2 * math.Pi / 5)).toInt
-         dy(i) = (W.y + rad * math.sin(i * 2 * math.Pi / 5)).toInt
+      val dx = new Array[Int](corner)
+      val dy = new Array[Int](corner)
+
+      for (i <- 0 until corner){
+         dx(i) = (W.x + rad * math.cos(i * 2 * math.Pi / 5 - dt)).toInt
+         dy(i) = (W.y + rad * math.sin(i * 2 * math.Pi / 5 - dt)).toInt
       }
-      g.drawPolygon(dx,dy,5)
       //2shift  dx(i)
       //2shift  dy(i)
-//      for (i <- 0 until 5){
-//         if(i < 3){
-//            g.drawLine(dx(i), dy(i), dx(i+2), dy(i+2))
-//         }else if (i == 3){
-//            g.drawLine(dx(i), dy(i), dx(0), dy(0))
-//         }else if (i == 4){
-//            g.drawLine(dx(i), dy(i), dx(1), dy(1))
-//         }
-//      }
+      for (i <- 0 until 5){
+         if(i < 3){
+            g.drawLine(dx(i), dy(i), dx(i+2), dy(i+2))
+         }else if (i == 3){
+            g.drawLine(dx(i), dy(i), dx(0), dy(0))
+         }else if (i == 4){
+            g.drawLine(dx(i), dy(i), dx(1), dy(1))
+         }
+      }
+      g.drawOval(W.x -rad, W.y-rad, rad*2, rad*2)
 
-      if(rad < maxRadius){
-//         g.drawPolygon(x,y,5)
-//         g.drawOval(W.x -rad/2, W.y-rad/2, rad, rad)
-      }else{
+      if(rad > maxRadius){
          W.delete = true
       }
    }
-
-
 
    //波に関するobject
    object W{
