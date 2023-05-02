@@ -61,16 +61,25 @@ case class Wave(a:Int, b:Int, c:Int, time :Long) extends Core{
       val rad = ((now - time) / speed).toInt
       //how to use match
       setColor(g ,rad)
-
-      val xp = Array[Int](0,0,0,0,0,0)
-      val yp = Array[Int](0,0,0,0,0,0)
-
-      for(i <- 0 until  6){
-         xp(i) = (math.cos((2 * math.Pi )/ i) * 100).toInt + W.x
-         yp(i) = (math.sin((2 * math.Pi )/ i) * 100).toInt + W.y
+      val corner = 5
+      val dx = new Array[Int](5)
+      val dy = new Array[Int](5)
+      for (i <- 0 until 5){
+         dx(i) = (W.x + rad * math.cos(i * 2 * math.Pi / 5)).toInt
+         dy(i) = (W.y + rad * math.sin(i * 2 * math.Pi / 5)).toInt
       }
-      g.fillPolygon(xp,yp,6)
-
+      g.drawPolygon(dx,dy,5)
+      //2shift  dx(i)
+      //2shift  dy(i)
+//      for (i <- 0 until 5){
+//         if(i < 3){
+//            g.drawLine(dx(i), dy(i), dx(i+2), dy(i+2))
+//         }else if (i == 3){
+//            g.drawLine(dx(i), dy(i), dx(0), dy(0))
+//         }else if (i == 4){
+//            g.drawLine(dx(i), dy(i), dx(1), dy(1))
+//         }
+//      }
 
       if(rad < maxRadius){
 //         g.drawPolygon(x,y,5)
