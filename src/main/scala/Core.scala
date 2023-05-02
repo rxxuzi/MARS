@@ -1,9 +1,9 @@
-import java.awt.event.{KeyAdapter, KeyEvent, MouseEvent, MouseListener, MouseMotionListener}
+import java.awt.event.{KeyAdapter, KeyEvent, KeyListener, MouseEvent, MouseListener, MouseMotionListener}
 import java.awt.{Color, Font, Graphics}
 import javax.swing.JPanel
 import scala.collection.mutable.ArrayBuffer
 
-class Core() extends JPanel {
+class Core() extends JPanel with KeyListener{
    
    //Ball classのList
    private final val waves = ArrayBuffer[Wave]()
@@ -17,7 +17,7 @@ class Core() extends JPanel {
    private final val sleepSpeed = 1
    private val interval = 1000
    //clickCount
-   private final var clickCount = 1
+   private final var moveMode = false
 
    private var mx = 300
    private var my = 300 // マウスの座標
@@ -26,19 +26,19 @@ class Core() extends JPanel {
    this.setBackground(Color.black)
    this.addMouseListener(new ML())
    this.addMouseMotionListener(new MML())
-   this.addKeyListener(new KA())
+   this.addKeyListener(KA())
 
 
    override def paintComponent(g: Graphics): Unit = {
       super.paintComponent(g)
       draw(g)
       val nowTime = System.currentTimeMillis()
-      g.setColor(Color.yellow)
+      g.setColor(Color.white)
       g.setFont(new Font("Serif", Font.BOLD, 20))
       g.drawString((nowTime - startTime) + "ms", 10, 20)
       g.drawString(getWidth + ", " + getHeight, 10, 40)
-      g.drawString("Circle :" + waves.size, 10, 60)
-      g.drawString("max Radius :" + Wave(0,0,0,0).maxRadius + "px", 10, 80)
+      g.drawString("Wave :" + waves.size, 10, 60)
+//      g.drawString("max Radius :" + Wave(0,0,200,0).maxRadius + "px", 10, 80)
 
 
    }
@@ -50,6 +50,7 @@ class Core() extends JPanel {
          lastTime = nowTime
       }
       g.setColor(Color.white)
+
 
       //indicesを使うことでremoveできるようになる
       for(i <- waves.indices){
@@ -69,7 +70,7 @@ class Core() extends JPanel {
 
       sleep()
    }
-
+   //描画更新
    private def sleep(): Unit = {
       Thread.sleep(sleepSpeed)
       repaint()
@@ -80,20 +81,37 @@ class Core() extends JPanel {
       override def mouseDragged(e: MouseEvent): Unit = {
          mx = e.getX - radius
          my = e.getY - radius
-         waves += Wave(e.getX , e.getY , clickCount , System.currentTimeMillis())
+         if (!moveMode) {
+            waves += Wave(e.getX , e.getY , 300 , System.currentTimeMillis())
+         }
       }
       override def mouseMoved(e: MouseEvent): Unit = {
          mx = e.getX - radius
          my = e.getY - radius
+         if (moveMode) {
+            waves += Wave(e.getX , e.getY , 300 , System.currentTimeMillis())
+         }
       }
    }
 
    //Mouse Listener class
    private class ML() extends MouseListener{
       override def mouseClicked(e: MouseEvent): Unit = {
-//         println("clicked")
-         waves += Wave(e.getX , e.getY , clickCount , System.currentTimeMillis())
-         clickCount += e.getClickCount
+
+         if(e.getButton == 1){
+            waves += Wave(e.getX , e.getY , 250 , System.currentTimeMillis())
+         }
+         if(e.getButton == 2){
+            moveMode = !moveMode
+         }
+         //右クリックしたときの関数
+         if(e.getButton == 3){
+            for(x <- 0 until getWidth by 75){
+               for(y <- 0 until getHeight by 75){
+                  waves += Wave(x , y , 225 , System.currentTimeMillis())
+               }
+            }
+         }
       }
       override def mousePressed(e: MouseEvent): Unit = {}
       override def mouseReleased(e: MouseEvent): Unit = {}
@@ -101,9 +119,12 @@ class Core() extends JPanel {
       override def mouseExited(e: MouseEvent): Unit = {}
    }
 
-   private class KA extends KeyAdapter{
+   private case class KA ()extends KeyAdapter with KeyListener{
       override def keyTyped(e: KeyEvent): Unit = {
-         println(e.getKeyChar)
+         if(e.getKeyCode == KeyEvent.VK_SPACE){
+            println("Space")
+            waves  += Wave(mx , my , 250 , System.currentTimeMillis())
+         }
       }
 
       override def keyPressed(e: KeyEvent): Unit = super.keyPressed(e)
@@ -111,5 +132,11 @@ class Core() extends JPanel {
       override def keyReleased(e: KeyEvent): Unit = super.keyReleased(e)
    }
 
-
+   override def keyTyped(e: KeyEvent): Unit = {
+      if (e.getKeyCode == KeyEvent.VK_SPACE) {
+         println("Space")
+      }
+   }
+   override def keyPressed(e: KeyEvent): Unit = {}
+   override def keyReleased(e: KeyEvent): Unit = {}
 }

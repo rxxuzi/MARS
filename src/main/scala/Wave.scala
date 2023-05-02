@@ -1,10 +1,30 @@
 import java.awt.{Color, Graphics}
+import scala.math.random
+import scala.util.Random
 
 case class Wave(a:Int, b:Int, c:Int, time :Long) extends Core{
+   val rand = new Random()
    W.x += a
    W.y += b
-   final val maxRadius = 250
+   private final val maxRadius = c
+   private final val drawCircle = true
 
+   private abstract class Move(){
+      def move(g:Graphics): Unit = {
+         if(W.x < 0) F.moveToR = true
+         if(W.x > getWidth) F.moveToR = false
+         if (F.moveToR) {
+            W.x += 1
+         }
+         if (F.moveToD) {
+            W.y += 1
+         }
+      }
+      object F{
+         var moveToR = false
+         var moveToD = false
+      }
+   }
    private final val colors = Array[Color](
          new Color(255, 0, 0),
       new Color(255, 85, 0),
@@ -28,64 +48,52 @@ case class Wave(a:Int, b:Int, c:Int, time :Long) extends Core{
 
    private val speed = 30
 
-   def setColor(g: Graphics, rad: Int): Unit = {
-      rad % colors.length match {
-         case 0 => g.setColor(colors(0))
-         case 1 => g.setColor(colors(1))
-         case 2 => g.setColor(colors(2))
-         case 3 => g.setColor(colors(3))
-         case 4 => g.setColor(colors(4))
-         case 5 => g.setColor(colors(5))
-         case 6 => g.setColor(colors(6))
-         case 7 => g.setColor(colors(7))
-         case 8 => g.setColor(colors(8))
-         case 9 => g.setColor(colors(9))
-         case 10 => g.setColor(colors(10))
-         case 11 => g.setColor(colors(11))
-         case 12 => g.setColor(colors(12))
-         case 13 => g.setColor(colors(13))
-         case 14 => g.setColor(colors(14))
-         case 15 => g.setColor(colors(15))
-         case 16 => g.setColor(colors(16))
-         case 17 => g.setColor(colors(17))
-         case 18 => g.setColor(colors(18))
-         case _ => g.setColor(Color.white)
-
-      }
-   }
-
    //   println(time)
    def draw(g:Graphics): Unit = {
 
       val now = System.currentTimeMillis()
       val rad = ((now - time) / speed).toInt
       val dt = rad / 50d
-      //how to use match
-      setColor(g ,rad)
-      val corner = 5
-      val dx = new Array[Int](corner)
-      val dy = new Array[Int](corner)
+      g.setColor(colors(rad % colors.length))
 
-      for (i <- 0 until corner){
-         dx(i) = (W.x + rad * math.cos(i * 2 * math.Pi / 5 - dt)).toInt
-         dy(i) = (W.y + rad * math.sin(i * 2 * math.Pi / 5 - dt)).toInt
-      }
-      //2shift  dx(i)
-      //2shift  dy(i)
-      for (i <- 0 until 5){
-         if(i < 3){
-            g.drawLine(dx(i), dy(i), dx(i+2), dy(i+2))
-         }else if (i == 3){
-            g.drawLine(dx(i), dy(i), dx(0), dy(0))
-         }else if (i == 4){
-            g.drawLine(dx(i), dy(i), dx(1), dy(1))
+      if(drawCircle){
+         g.drawOval(W.x -rad, W.y-rad, rad*2, rad*2)
+      }else{
+         val corner = 5
+         val dx = new Array[Int](corner)
+         val dy = new Array[Int](corner)
+
+         for (i <- 0 until corner){
+            dx(i) = (W.x + rad * math.cos(i * 2 * math.Pi / corner - dt)).toInt
+            dy(i) = (W.y + rad * math.sin(i * 2 * math.Pi / corner - dt)).toInt
          }
+         for (i <- 0 until 5){
+            if(i < corner - 2){
+               g.drawLine(dx(i), dy(i), dx(i+2), dy(i+2))
+            }else if (i == corner -2){
+               g.drawLine(dx(i), dy(i), dx(0), dy(0))
+            }else if (i == corner -1){
+               g.drawLine(dx(i), dy(i), dx(1), dy(1))
+            }
+         }
+         g.drawOval(W.x -rad, W.y-rad, rad*2, rad*2)
       }
-      g.drawOval(W.x -rad, W.y-rad, rad*2, rad*2)
+
+
 
       if(rad > maxRadius){
          W.delete = true
       }
+
+      //abstract class
+      new Move(){
+         override def move(g:Graphics): Unit = {
+            super.move(g)
+            g.drawOval(F.x,F.y,rad,rad)
+         }
+      }
+
+
    }
 
    //波に関するobject

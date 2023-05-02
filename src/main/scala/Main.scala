@@ -1,4 +1,4 @@
-import javax.swing.{JFrame, JPanel}
+import javax.swing.JFrame
 
 /**
 * Created by IntelliJ IDEA.
